@@ -1,0 +1,73 @@
+﻿@using Instalments.Models;
+
+@model List<InstalmentsCreateBulk>
+@{
+    int stt = 0;
+}
+
+<div>
+    <div class="row">
+        <div class="col-lg-8">
+            <input type="button" id="btnExportdata_Ok" value="Xuất dữ liệu thành công" onclick="doExportData(1);" class="btn btn-warning" style="margin: 5px;" />
+            <input type="button" id="btnExportdata_Error" value="Xuất dữ liệu lỗi" onclick="doExportData(2);" class="btn btn-warning" style="margin: 5px;" />
+        </div>
+    </div>
+</div>
+<table id="tbDataList_Detail" class="table table-striped table-bordered" cellspacing="0">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>Họ tên</th>
+            <th>Contract number</th>
+            <th>Card number</th>
+            <th>Ngày chuyển trả góp</th>
+            <th>Remark</th>
+            <th>Trạng thái duyệt</th>
+            <th>User nhập</th>
+            <th>Ngày nhập</th>
+            <th>Branch nhập</th>
+            <th>User duyệt</th>
+            <th>Ngày duyệt</th>
+            <th>Branch duyệt</th>
+            <th>Mã KQ duyệt</th>
+            <th>KQ duyệt</th>
+            <th>Lý do từ chối</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                stt++;
+                <tr @((("N,A,S").Contains(item.RESULT_CODE)) ? "" : " class=error-row")>
+                    <td>@stt</td>
+                    <td>@item.CLIENT_NAME</td>
+                    <td>@item.CONTRACT_NUMBER</td>
+                    <td>@CShared.replaceToXXX(item.CARD_NUMBER)</td>
+                    <td>@item.TRANS_DATE</td>
+                    <td>@item.NOTE</td>
+                    <td>@item.STATUS</td>
+                    <td>@item.CREATE_USER</td>
+                    <td>@item.CREATE_DATE</td>
+                    <td>@item.CREATE_BRANCH</td>
+                    <td>@item.APPROVE_USER</td>
+                    <td>@item.APPROVE_DATE</td>
+                    <td>@item.APPROVE_BRANCH</td>
+                    <td>@item.RESULT_CODE</td>
+                    <td>@item.RESULT_MESSAGE</td>
+                    <td>@item.REJECT_REASON</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<input type="hidden" id="hdFileuuId" readonly value="@ViewBag.fileUUID" />
+<input type="hidden" id="hdBatchId" readonly value="@ViewBag.batchId" />
+<input type="hidden" id="userNhap" readonly value="@ViewBag.userNhap" />
+<input type="hidden" id="ngayNhap" readonly value="@ViewBag.ngayNhap" />
+<input type="hidden" id="userDuyet" readonly value="@ViewBag.userDuyet" />
+<input type="hidden" id="ngayDuyet" readonly value="@ViewBag.ngayDuyet" />
+<input type="hidden" id="remark" readonly value="@ViewBag.remark" />

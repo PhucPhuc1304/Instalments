@@ -1,0 +1,829 @@
+﻿@{
+    //Layout = null;
+    ViewBag.Title = "Chuyển trả góp giao dịch thẻ theo lô";
+}
+
+
+<link href="/Scripts/Vendor/dataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="/Scripts/Vendor/dataTables/css/fixedColumns.dataTables.min.css" rel="stylesheet" />
+<script src="/Scripts/Vendor/dataTables/js/jquery.dataTables.min.js"></script>
+<script src="/Scripts/Vendor/dataTables/js/dataTables.bootstrap.min.js"></script>
+<script src="/Scripts/Vendor/dataTables/js/dataTables.fixedHeader.min.js"></script>
+<script src="/Scripts/Vendor/dataTables/js/dataTables.fixedColumns.min.js"></script>
+<script src="/Scripts/Vendor/FileCss/bootstrap-filestyle.min.js"></script>
+<link href="~/Content/FileUpload/css/jquery.fileupload.css" rel="stylesheet" />
+<script src="~/Content/FileUpload/js/jquery.fileupload.js"></script>
+
+<link href="/Scripts/Vendor/Main/css/Style.css" rel="stylesheet" />
+<script src="/Scripts/Vendor/Main/js/common.js"></script>
+
+<script src="/Scripts/IssuingCards/SearchAdvDialog.js"></script>
+<link href="/Scripts/IssuingCards/SearchAdvDialog.css" rel="stylesheet" />
+
+<style>
+    .lblStatusApprove {
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        font-weight: bold;
+        color: #b02c26;
+    }
+
+    #dlgReview {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+
+    .ui-dialog-titlebar-close {
+        /*background-color: #f8c414;*/
+    }
+
+    .font-weight-bold {
+        font-weight: bold;
+    }
+
+    .open > .dropdown-menu {
+        z-index: 9999;
+    }
+
+    #content {
+        margin-top: 64px;
+        margin-bottom: 40px;
+    }
+
+    .row {
+        padding: 2px;
+    }
+
+    .alert-success {
+        bottom: 0px;
+        position: fixed;
+        right: 0px;
+        width: 100%;
+    }
+
+    .page {
+        min-height: unset;
+        width: unset;
+        padding: 0px;
+        margin-bottom: 0px;
+        margin-top: 50px;
+    }
+
+    .subpage {
+        height: unset;
+        outline: unset;
+        border: 0px #fff solid;
+    }
+
+    .radio {
+        padding-top: 5px;
+    }
+
+    input[type=checkbox] {
+        height: 17px;
+        width: 17px;
+    }
+
+    #tbDataList,
+    #tbDataList_S2,
+    #cashbulk {
+        margin: 0px;
+    }
+
+    .mnHide {
+        background-color: #fff !important;
+        color: #ccc !important;
+    }
+
+    .tdEmpty {
+        background: #fff !important;
+        border-color: #fff !important;
+    }
+
+    .dataTables_info {
+        /*display: none;*/
+    }
+
+    #tbDataList_filter {
+    }
+
+    #tbDataList_S2_filter,
+    #tbDataList_S2_info,
+    #cashbulk_filter {
+        display: none;
+    }
+
+    .Error {
+        color: red;
+        font-weight: bold;
+    }
+
+    .book {
+        padding-top: 15px;
+    }
+
+    .colorRed {
+        color: #b02c26;
+    }
+
+    .header-group h2 {
+        margin-top: 20px;
+    }
+
+    .optGroup {
+        position: relative;
+        border: 1px solid #c7b4d1;
+        display: inline-table;
+        width: 369px;
+        padding: 5px 0px;
+        margin-left: 12px;
+    }
+
+    .calcGrandTotal_Wrapper {
+        position: absolute;
+        top: -6px;
+        left: 0px;
+        padding: 15px 48px;
+        border: 1px solid #f8c414;
+    }
+
+    .calcGrandTotal {
+        font-weight: bold;
+        float: right;
+    }
+
+    .lblRow {
+        top: 10px;
+    }
+
+    .group-title {
+        border-top: 1px solid #f8c414;
+        border-bottom: 1px solid #f8c414;
+    }
+
+    #tbDataList_child_filter, #tbDataList_child_info,
+    #tbDataList_filter, #tbDataList_info {
+        display: none;
+    }
+
+    input[readonly] {
+        background-color: #f7f2f2 !important;
+    }
+
+    .frm-date {
+        width: 93px !important;
+        margin: 0px;
+    }
+
+    .form-text {
+        border: 1px solid #c7b4d1;
+        border-radius: 4px;
+        margin-right: 5px;
+        padding: 0px 5px;
+        line-height: 32px;
+        height: 26px;
+        width: 255px;
+        font-size: 12px !important;
+    }
+
+    .btnDateTime {
+        height: 26px;
+        left: -11px;
+        position: relative;
+        top: 0px;
+        border: 1px solid #c7b4d1;
+    }
+    /*begin: jquery-ui*/
+    .ui-widget {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    .ui-tabs .ui-tabs-panel {
+        padding: 5px;
+    }
+
+    .ui-widget-header {
+        font-weight: normal;
+        border-radius: 3px 3px 10px 10px;
+        box-shadow: 1px 1px 1px #ae514d;
+    }
+
+    .ui-tabs .ui-tabs-nav {
+        padding: 0px;
+        margin: 0px;
+        border: 1px solid #aaa;
+        background: url(/Content/Images/frm_bg_footer.jpg) !important;
+        background-repeat: round;
+    }
+
+    .ui-datepicker th {
+        font-weight: normal;
+        padding: .1em .0em;
+    }
+
+    .ui-datepicker table {
+        font-size: .7em;
+    }
+
+    .ui-datepicker {
+        width: 13em;
+    }
+
+    .ui-datepicker-month,
+    .ui-datepicker-year {
+        font-size: 12px !important;
+        border: 1px solid #c7b4d1;
+    }
+
+    .ui-tabs .ui-tabs-panel {
+        overflow: hidden;
+        padding: 0px;
+    }
+
+    .ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+        background-color: #b02c26;
+        color: #fff;
+    }
+
+    /*end: jquery-ui*/
+
+    .lbl {
+        padding-top: 5px;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    button, html input[type="button"], input[type="reset"], input[type="submit"] {
+        height: 30px;
+    }
+
+    .input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group {
+        margin-left: -1px;
+        height: 30px;
+    }
+
+    .bootstrap-filestyle {
+        width: 100%;
+    }
+
+    .group-span-filestyle {
+        width: 1px;
+    }
+
+    .boxNote {
+        margin: 10px;
+    }
+
+    .boxSuccess {
+        border: 1px solid #95b8e7;
+        padding: 5px 10px;
+        background-color: #ffffff;
+    }
+
+    .boxError {
+        border: 1px solid #b9795a;
+        padding: 5px 10px;
+        background-color: #e05354;
+    }
+
+    .boxWarning {
+        border: 1px solid #b9795a;
+        padding: 5px 10px;
+        background-color: #ffee00;
+    }
+
+    .error-row {
+        background-color: #e05354 !important;
+        color: #fafafa;
+    }
+
+    .error-cell {
+        background-color: #ffee00;
+        color: red;
+    }
+
+    th, td {
+        white-space: nowrap;
+    }
+
+    /*div.dataTables_wrapper tr {
+        height: 35px;
+    }*/
+
+    div.dataTables_wrapper {
+        margin: 0 auto;
+    }
+</style>
+
+<div id="dlgMsg">
+    <div id="MsgContext"></div>
+</div>
+<div id="dlgReview" style="display:none;">
+    <div id="dlgReviewWrapper" style="margin-bottom:10px;"></div>
+</div>
+
+<div class="container body-content">
+    <div class="book">
+        <div class="page">
+            <div class="subpage">
+                <div class="section-title" style="position:relative;">
+                    <span>Import file chuyển trả góp giao dịch thẻ theo lô</span>
+                </div>
+                <div style="padding-top: 1px;">
+                    <div class="container section-01 section-02">
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2 col-sm-12">
+                                <label class="lbl">File đính kèm(<a href="~/Upload/Instalments/InstalmentsCardsBulk/Template-import-instalments-file.xlsx">Mẫu File</a>):</label>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12">
+                                <input type="file" id="fileUpload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="fileUpload" style="width:100%" />
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-12" style="text-align:center">
+                                <input type="button" id="btnCheckData" class="btn btn-primary" value="Kiểm tra dữ liệu" onclick="doValidateData()" disabled />
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-12" style="text-align:center">
+                                <input type="button" id="btnSendApprove" class="btn btn-primary" value="Chuyển duyệt dữ liệu" onclick="doSendApprove()" disabled />
+                            </div>
+                            <script>
+                                $('#fileUpload').filestyle({
+                                    buttonName: 'btn btn-primary',
+                                    buttonText: 'Chọn file excel'
+                                });
+                            </script>
+                        </div>
+                    </div>
+                    <div class="container section-01 section-02" style="min-height:450px;padding-top: 10px;">
+                        <div id="tab-MT300" class="tab-content">
+                            <div id="content_wrapper">
+
+                                <div id="contentTableDataList">
+                                    <table id="tbDataList" class="table table-striped table-bordered" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>CMND/CCCD/HC</th>
+                                                <th>SỐ ĐT</th>
+                                                <th>HỌ TÊN CHỦ THẺ</th>
+                                                <th>CONTRACT NUMBER</th>
+                                                <th>SỐ THẺ</th>
+                                                <th>NGÀY GIAO DỊCH</th>
+                                                <th>SỐ TIỀN GIAO DỊCH</th>
+                                                <th>MÃ CHUẨN CHI</th>
+                                                <th>RECORD ID</th>
+                                                <th>TÊN ĐỐI TÁC</th>
+                                                <th>KỲ HẠN TRẢ GÓP</th>
+                                                <th>OPTION CODE</th>
+                                                <th>NOTE</th>
+                                                <th>RESULT_CODE</th>
+                                                <th>RESULT_MESSAGE</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+                                                <td>&nbsp;</td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="container section-01 section-07" style="">
+                <div class="row subsection-title">
+                    Đính kèm chứng từ
+                </div>
+                <div class="row line-height-30" style="padding:5px;">
+                    <div class="col-lg-2 col-md-2 lblRow">Ghi chú<c style="color: red">(*)</c>:</div>
+                    <div class="col-lg-4 col-md-4">
+                        <input id="remark" type="text" name="remark" class="form-control" style="width:100%;" autocomplete="off">
+                    </div>
+                </div>
+                <div class="row line-height-30" style="padding:5px;">
+                    <div class="col-lg-6 col-md-6 lblRow" style="font-style: italic;font-size: 12px;color: darkgrey;">
+                        File chứng từ dung lượng <= 2MB , độ dài tên file <= 30 ký tự
+                    </div>
+                </div>
+                <div class="row line-height-30" style="padding:5px;">
+                    <div class="col-lg-2 col-md-2">
+                        <span class="btn btn-success fileinput-button">
+                            <i class="glyphicon glyphicon-plus"></i>
+                            <span>Upload file scan</span>
+                            <input id="attachment" type="file" name="attachment" accept="application/pdf" />
+                        </span>
+                    </div>
+                    <div class="col-lg-8 col-md-8">
+                        <ul class="thumbnails" id="image"></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-danger" id="success-alert" style="display:none;">
+                <button type="button" class="close" data-dismiss="alert">x</button>
+                <div id="AlertMessage"></div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="hdFileName" name="hdFileName" />
+</div>
+
+<script type="text/javascript">
+
+    var tblDataHtml;
+    var tableData;
+    var attachments = [];
+    $(document).ready(function () {
+        tblDataHtml = $('#content_wrapper').html();
+        InitDataTable();
+
+        $('#fileUpload').click(function (ev) {
+            var files = $("#fileUpload").get(0).files;
+            if (files != null && files != undefined && files.length != 0) {
+                ev.preventDefault();
+                shwConfirm({
+                    title: 'Thông báo', message: 'Upload file mới, clear data hiện tại ?', width: 350, callback: function () {
+                        clearData();
+                        $('#fileUpload').trigger('click');
+                    }
+                });
+            }
+        });
+
+        $('#fileUpload').change(function (e) {
+            doImport();
+        });
+    });
+
+    $('#attachment').fileupload({
+        add: function (e, data) {
+            var files = $("#fileUpload").get(0).files;
+            if (files == null || files == undefined || files.length == 0) {
+                shwMsg({ title: 'Thông báo', message: 'Vui lòng upload file và kiểm tra dữ liệu trước khi up chứng từ. ', width: 350, callback: null });
+                return;
+            }
+
+            var mime_types = ['application/pdf'];
+            if (mime_types.indexOf(data.originalFiles[0]['type']) == -1) {
+                shwMsg({ title: 'Thông báo', message: 'Chứng từ phải là file PDF. ', width: 350, callback: null });
+                return;
+            }
+            var totalSize = data.originalFiles[0].size;
+            for (var i = 0; i < attachments.length; i++) {
+                totalSize += attachments[i]["FILE_SIZE"]
+            }
+            if (totalSize > 2000000) {
+                shwMsg({ title: 'Thông báo', message: 'File chứng từ quá lớn, chọn file có kích thước <= 2MB. ', width: 350, callback: null });
+                return;
+            }
+            data.submit();
+
+        },
+        url: '/InstalmentsCardsBulk/UploadAttachment',
+        dataType: 'json',
+        done: function (e, data) {
+            if (data.result.code == '01') {
+                shwMsg({ title: ' Cảnh báo', message: data.result.message, width: 350, callback: null });
+            } else {
+                $('#lblOldFileNameUploaded').html(data.result.oldFileName);
+                $('#txtOldFileNameUploaded').val(data.result.oldFileName);
+                $('#txtNewFileNameUploaded').val(data.result.newFileName);
+                if (data.originalFiles[0]['type'].indexOf('pdf') != -1) {
+                    $('#image').append(
+                        '<li style="display: inline-block">\
+                        <div class="thumbnail" newname= "'+ data.result.newFileName + '">\
+                        <a class="close" onclick=\'RemoveImage("'+ data.result.newFileName + '")\'>×</a>\
+                        <a href=' + data.result.path + ' class="pdfUpload" target="_blank" dataRemove="' + data.result.newFileName + '" style="overflow-x: hidden;">' + data.result.oldFileName + '</a>\
+                        </div>\
+                        </li>');
+                } else {
+                    $('#image').append(
+                        '<li style="display: inline-block">\
+                        <div class="thumbnail" >\
+                        <a class="close" onclick=\'RemoveImage("'+ data.result.newFileName + '")\'>×</a>\
+                        <img class="imgUpload" src="'+ data.result.path + '" alt="' + data.result.newFileName + '" width="200px" height="200px"/>\
+                        </div>\
+                        </li>');
+                }
+                var attachment = {
+                    FILE_EXT: data.result.ext,
+                    FILE_NAME: data.result.newFileName,
+                    FILE_ORG: data.result.oldFileName,
+                    FILE_PATH: data.result.path,
+                    FILE_SIZE: data.result.size
+                };
+                attachments.push(attachment);
+            }
+        },
+        progressall: function (e, data) { }
+    });
+
+    /// Xoa file khi nhan x
+    function RemoveImage(fileName) {
+        for (var i = 0; i < attachments.length; i++) {
+            if (attachments[i]["FILE_NAME"] == fileName) {
+                attachments.splice(i, 1);
+                break;
+            }
+        }
+        $('#image li').each(function () {
+
+            if ($(this).find('.imgUpload').prop("alt") == fileName) {
+                $(this).html("");
+            }
+            if ($(this).find('.pdfUpload').attr("dataRemove") == fileName) {
+                $(this).html("");
+            }
+        });
+    };
+    function clearData() {
+        attachments = [];
+        $('#image li').each(function () {
+            $(this).html("");
+        });
+        tableData.clear().draw();
+        $("#hdFileName").val('');
+        $("#totalRow").text('');
+        $("#totalAmount").text('');
+        $("#totalNotPay").text('');
+        $("#totalNotPayAmount").text('');
+        $("#countSuccess").text('');
+        $("#countError").text('');
+        $("#fileUpload").val('');
+        $("#attachment").val('');
+        $("#remark").val('');
+        $('.bootstrap-filestyle').find('input[type=text]').val('')
+    }
+    function doImport() {
+
+        shwLoading(true);
+        var files = $("#fileUpload").get(0).files;
+        if (files.length == 0) {
+            shwMsg({
+                title: 'Thông báo', message: 'Chưa chọn file đính kèm. ', width: 350, callback: null
+            });
+            shwLoading(false);
+            return;
+        }
+        if (files[0].size > 2200000) {
+            shwMsg({ title: 'Thông báo', message: 'File quá lớn, chọn file có kicks thước <2MB. ', width: 350, callback: null });
+            clearData();
+            shwLoading(false);
+            return;
+        }
+
+        var fileData = new FormData();
+        fileData.append("fileUpload", files[0]);
+
+        $.ajax({
+            type: "POST",
+            url: "/InstalmentsCardsBulk/UploadFiles",
+            dataType: "json",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: fileData,
+            async: false,
+            success: function (result) {
+                shwLoading(false);
+                if (result.code == "01") {
+                    clearData();
+                    shwMsg({ title: ' Cảnh báo', message: result.message, width: 350, callback: null });
+                } else {
+                    $("#hdFileName").val(result.para1)
+                    doLoadFile();
+                }
+            },
+            error: function (result) {
+                clearData();
+                shwMsg({ title: 'Thông báo', message: 'Load file không thành công.', width: 350, callback: null });
+                shwLoading(false);
+            }
+        });
+    };
+    function doLoadFile() {
+        shwLoading(true);
+        var obj = {
+            FileName: $("#hdFileName").val(),
+            UserThucHien: "",
+            Token: ""
+        }
+        $.ajax({
+            url: '/InstalmentsCardsBulk/LoadFile',
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(obj),
+            async: false,
+            success: function (data) {
+                if (data.code != "01") {
+                    $('#content_wrapper').html(data);
+                    if ($('.error-row')[0]) {
+                        $("#btnCheckData").attr("disabled", true);
+                    } else {
+                        $("#btnCheckData").attr("disabled", false);
+                    }
+                    InitDataTable();
+                } else {
+                    clearData();
+                    showAlert({ title: 'Cảnh báo', message: data.message, type: "error" });
+                }
+            },
+            error: function () {
+                clearData();
+                showAlert({ title: 'Cảnh báo', message: "Lấy dữ liệu thất bại.", type: "error" });
+            }
+        })
+            .fail(function (e) { showAlert({ title: 'Cảnh báo', message: 'Có lỗi trong quá trình thực hiện truy vấn!' }); })
+            .always(function () { shwLoading(false); });
+    };
+    function InitDataTable() {
+        tableData = $('#tbDataList').DataTable({
+            scrollY: 400,
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+            "order": [],
+            "columnDefs": [{
+                "targets": 'no-sort',
+                "orderable": false
+            }],
+            "columns": [
+                { "width": "40px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false },
+                { "width": "120px", "orderable": false }
+            ],
+            fixedColumns: false,
+        });
+    };
+
+    function doValidateData() {
+        shwLoading(true);
+        var fileUUID = $("#hdFileuuId").val();
+        var batchId = $("#hdBatchId").val();
+        $.ajax({
+            type: "POST",
+            url: "/InstalmentsCardsBulk/ValidateInstalmentsDataBulk",
+            data: {
+                fileUUID: fileUUID,
+                batchId: batchId
+            },
+            success: function (data) {
+                if (data.code != "01") {
+                    $('#content_wrapper').html(data);
+                    $("#btnCheckData").attr("disabled", "true");
+                    InitDataTable();
+                    if (!$(".error-row")[0]) {
+                        $("#btnSendApprove").removeAttr("disabled");
+                    }
+                } else {
+                    showAlert({ title: 'Cảnh báo', message: data.message, type: "error" });
+                }
+            }
+        }).fail(function (e) { showAlert({ title: 'Cảnh báo', message: 'Có lỗi trong quá trình thực hiện truy vấn!' }); })
+            .always(function () { shwLoading(false); });
+    };
+    function doSendApprove() {
+        var fileUUID = $("#hdFileuuId").val();
+        var batchId = $("#hdBatchId").val();
+        var remark = $("#remark").val();
+        if (remark == '') {
+            shwMsg({ title: 'Thông báo', message: 'Vui lòng nhập ghi chú !', width: 350, callback: null });
+            return;
+        }
+        if (attachments.length == 0) {
+            shwMsg({ title: 'Thông báo', message: 'Upload chứng từ là bắt buộc. ', width: 350, callback: null });
+            return;
+        }
+        var listNameAttachment = "";
+        for (var i = 0; i < attachments.length; i++) {
+            listNameAttachment += attachments[i]["FILE_NAME"] + ",";
+        }
+        listNameAttachment.slice(0, listNameAttachment.lastIndexOf(','));
+        var pathAttachment = attachments[0]["FILE_PATH"].slice(0, attachments[0]["FILE_PATH"].lastIndexOf('/') + 1);
+
+        if ($(".error-row")[0]) {
+            shwMsg({ title: 'Thông báo', message: 'File có lỗi chi tiết. Vui lòng xuất file thông tin và upload lại. ', width: 350, callback: null });
+            $("#btnSendApprove").attr("disabled", "true");
+            return;
+        }
+        shwConfirm({
+            title: 'Thông báo', message: 'Chuyển duyệt thông tin', width: 350, callback: function () {
+                shwLoading(true);
+                $.post(' /InstalmentsCardsBulk/doSendApprove', {
+                    fileUUID: fileUUID,
+                    batchId: batchId,
+                    remark: remark,
+                    listNameAttachment: listNameAttachment,
+                    pathAttachment: pathAttachment
+                }, function (data) {
+                    showAlert({ title: 'Thông báo', message: data.message });
+                    $("#btnSendApprove").attr("disabled", "true");
+                    $("#btnCheckData").attr("disabled", "true");
+                    if (data.code == "00") {
+                        clearData();
+                    }
+                })
+                    .done(function () { })
+                    .fail(function (e) { showAlert({ title: 'Cảnh báo', message: 'Có lỗi trong quá trình thực hiện chuyển duyệt!' }); })
+                    .always(function () { shwLoading(false); });
+            }
+        });
+    };
+    function doExportData(typeExport) {
+        var fileUUID = $('#hdFileuuId').val();
+        var data = tableData.rows().data();
+        var dataOb = [];
+        for (var i = 0; i < data.length; i++) {
+            var item = {
+                CCCD: data[i][1],
+                PHONE: data[i][2],
+                CLIENT_NAME: data[i][3],
+                CONTRACT_NUMBER: data[i][4],
+                CARD_NUMBER: data[i][5],
+                TRANS_DATE: data[i][6],
+                TRANS_AMOUNT: data[i][7],
+                AUTH_CODE: data[i][8],
+                RECORD_ID: data[i][9],
+                MERCHANT: data[i][10],
+                TENOR: data[i][11],
+                OPTION_CODE: data[i][12],
+                NOTE: data[i][13],
+                RESULT_CODE: data[i][14],
+                RESULT_MESSAGE: data[i][15]
+            };
+
+            dataOb.push(item);
+        }
+
+        shwLoading(true);
+        $.post('/InstalmentsCardsBulk/exportEcxelReport', {
+            reportType: typeExport,
+            fileUUID: fileUUID,
+            data: dataOb
+        }, function (result) {
+            if (result.code == "01") {
+                showAlert({ title: 'Thông báo', message: result.message });
+            } else {
+                window.location = "/InstalmentsCardsBulk/Download?fileGuid=" + result.data
+                    + "&fileName=" + result.message;
+            }
+
+        })
+            .done(function () { })
+            .fail(function (e) { showAlert({ title: 'Cảnh báo', message: 'Có lỗi trong quá trình thực hiện chuyển duyệt!' }); })
+            .always(function () { shwLoading(false); });
+    }
+
+//document.onkeydown = function (e) {
+//    if (event.keyCode == 123) {
+//        return false;
+//    }
+//    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+//        return false;
+//    }
+//    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+//        return false;
+//    }
+//    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+//        return false;
+//    }
+//}
+
+//document.addEventListener('contextmenu', function (e) {
+//    e.preventDefault();
+//});
+
+</script>

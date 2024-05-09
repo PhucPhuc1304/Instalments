@@ -1,0 +1,108 @@
+﻿@model string
+@using Instalments.Models;
+@{
+    ViewBag.Title = "_SearchPanel";
+    Layout = null;
+    SESSION_PARA oPara = CShared.getSession();
+    List<CBoxData> lsBranch = Utils.LoadBranchs();
+
+    List<CBoxData> lsStatus = new List<CBoxData>();
+    lsStatus.Add(new CBoxData { CODE = "1", NAME = "Chờ KSV xử lý" });
+    lsStatus.Add(new CBoxData { CODE = "2", NAME = "Đã duyệt" });
+    lsStatus.Add(new CBoxData { CODE = "3", NAME = "Đã từ chối" });
+
+    List<CBoxData> cbStatus = new List<CBoxData>();
+    cbStatus.AddRange(lsStatus);
+
+    if (oPara.oAccount.Branch != "001")
+    {
+        lsBranch = lsBranch.Where(x => x.CODE == oPara.oAccount.Branch).ToList();
+    }
+
+    string sFromDate = (string)ViewData["sFromDate"];
+    string sToDate = (string)ViewData["sToDate"];
+    string sBranch = (string)ViewData["sBranch"];
+    string sStatus = (string)ViewData["sStatus"];
+
+}
+
+
+<div class="container section-01" style="padding: 10px 15px;">
+    <div class="row line-height-30" style="margin-bottom: 5px;">
+        <div class="col-sm-1 norwap">Branch:</div>
+        <div class="col-sm-2">
+            <select id="cbBranch" class="cbCardType custom-select" style="width:100%;float:left;">
+                @foreach (var item in lsBranch)
+                {
+                    <option value="@item.CODE" @(item.CODE == sBranch ? "selected" : "")>@item.NAME</option>
+                }
+                @if (CShared.getSession().oAccount.Branch == "001")
+                {
+                    <option value="000">Tất cả</option>
+                }
+            </select>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 norwap cbStatus">Trạng thái:</div>
+        <div class="col-sm-2">
+            <select id="cbStatus" class="cbStatus custom-select" style="width:100%;float:left;" onchange="cbStatus_onchange(this)">
+                @foreach (var item in cbStatus)
+                {
+                    <option value="@item.CODE" @(item.CODE == sStatus ? "selected" : "")>@item.NAME</option>
+                }
+            </select>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 norwap cbStatus">User ID:</div>
+        <div class="col-sm-2">
+            <input type="text" id="txtUserID" size="10" class="form-control" value="" style="width:100%;">
+        </div>
+    </div>
+    <div class="row line-height-30" style="margin-bottom: 5px;">
+        <div class="col-lg-1 col-md-1 col-sm-1 norwap">Từ ngày:</div>
+        <div class="col-sm-2">
+            <div class="datepicker-wrap">
+                <div class="input-group">
+                    <input type="text" id="txtFromDate" size="10" class="form-control" value="@sFromDate" style="width:100%;">
+                    <span class="input-group-btn" style="top: 0px;left: 0px;">
+                        <button class="btn btn-default colorRed" type="button" id="btnFromDate" style="width:42px;height:30px;"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-1 norwap">Đến ngày:</div>
+        <div class="col-sm-2">
+            <div class="input-group">
+                <input type="text" id="txtToDate" size="10" class="form-control" value="@sToDate" style="width:100%;">
+                <span class="input-group-btn" style="top: 0px;left: 0px;">
+                    <button class="btn btn-default colorRed" type="button" id="btnToDate" style="width:42px;height:30px;"><i class="glyphicon glyphicon-calendar" aria-hidden="true"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-offset-1 col-sm-2" style="text-align: right;">
+            <button id="btnSearch" onclick="doSearch()" type="button" class="btn btn-primary" style="width: 100%;"><span>Tìm kiếm</span>&nbsp;<span class="glyphicon glyphicon-search"></span></button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var roles = '@oPara.oAccount.Roles';
+        console.log(roles);
+        var fdate = $("#txtFromDate").datepicker({ dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true });
+        var tdate = $("#txtToDate").datepicker({ dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true });
+
+        var now = new Date();
+        now.setDate(now.getDate() - 7);
+
+        @if (string.IsNullOrEmpty(sFromDate) && string.IsNullOrEmpty(sToDate))
+        {
+            <text>
+        fdate.datepicker('setDate', now);
+        tdate.datepicker('setDate', new Date());
+        </text>
+        }
+
+
+        $("#btnFromDate").click(function () { $("#txtFromDate").datepicker("show"); });
+        $("#btnToDate").click(function () { $("#txtToDate").datepicker("show"); });
+    });
+</script>

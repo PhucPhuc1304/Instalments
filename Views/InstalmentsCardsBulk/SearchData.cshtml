@@ -1,0 +1,79 @@
+﻿@using Instalments.Models;
+
+@model List<InstalmentsCreateBulk>
+@{
+    int stt = 0;
+}
+
+<div>
+    <div class="row">
+        <div class="col-lg-4 text-center">
+            <input type="button" id="btnExportdata_Ok" value="Xuất dữ liệu hợp lệ" onclick="doExportData(1);" class="btn btn-warning" style="margin: 10px;" />
+            <input type="button" id="btnExportdata_Error" value="Xuất dữ liệu lỗi" onclick="doExportData(2);" class="btn btn-warning" style="margin: 10px;" />
+        </div>
+        <div class="col-lg-4" style="float:right">
+            <div class="boxNote">
+                <span class="boxSuccess">&nbsp;</span>
+                <span style="padding-right:20px;">Đúng định dạng</span>
+                <span class="boxError">&nbsp;</span>
+                <span style="padding-right:20px;">Dòng bị lỗi</span>
+            </div>
+            <div class="boxNote">
+                <label class="lbl">Tổng dòng đúng: <span id="countSuccess">@ViewBag.totalRowDung</span></label>&nbsp;|&nbsp;
+                <label class="lbl">Tổng dòng sai: <span id="countError">@ViewBag.totalRowSai</span></label>
+            </div>
+        </div>
+    </div>
+</div>
+<table id="tbDataList" class="table table-striped table-bordered" cellspacing="0">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th>CMND/CCCD/HC</th>
+            <th>SỐ ĐT</th>
+            <th>HỌ TÊN CHỦ THẺ</th>
+            <th>CONTRACT NUMBER</th>
+            <th>SỐ THẺ</th>
+            <th>NGÀY GIAO DỊCH</th>
+            <th>SỐ TIỀN GIAO DỊCH</th>
+            <th>MÃ CHUẨN CHI</th>
+            <th>RECORD ID</th>
+            <th>TÊN ĐỐI TÁC</th>
+            <th>KỲ HẠN TRẢ GÓP</th>
+            <th>OPTION CODE</th>
+            <th>NOTE</th>
+            <th>RESULT_CODE</th>
+            <th>RESULT_MESSAGE</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                stt++;
+                <tr @((("N,A,S").Contains(item.RESULT_CODE)) ? "" : " class=error-row")>
+                    <td>@stt</td>
+                    <td>@item.CCCD</td>
+                    <td>@item.PHONE</td>
+                    <td>@item.CLIENT_NAME</td>
+                    <td>@item.CONTRACT_NUMBER</td>
+                    <td>@CShared.replaceToXXX(item.CARD_NUMBER)</td>
+                    <td>@item.TRANS_DATE</td>
+                    <td>@item.TRANS_AMOUNT</td>
+                    <td>@item.AUTH_CODE</td>
+                    <td>@item.RECORD_ID</td>
+                    <td>@item.MERCHANT</td>
+                    <td>@item.TENOR</td>
+                    <td>@item.OPTION_CODE</td>
+                    <td>@item.NOTE</td>
+                    <td>@item.RESULT_CODE</td>
+                    <td>@item.RESULT_MESSAGE</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<input type="hidden" id="hdFileuuId" value="@ViewBag.fileUUID" />
+<input type="hidden" id="hdBatchId" value="@ViewBag.batchId" />
