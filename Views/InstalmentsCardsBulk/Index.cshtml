@@ -509,23 +509,13 @@
                 $('#lblOldFileNameUploaded').html(data.result.oldFileName);
                 $('#txtOldFileNameUploaded').val(data.result.oldFileName);
                 $('#txtNewFileNameUploaded').val(data.result.newFileName);
-                if (data.originalFiles[0]['type'].indexOf('pdf') != -1) {
-                    $('#image').append(
-                        '<li style="display: inline-block">\
-                        <div class="thumbnail" newname= "'+ data.result.newFileName + '">\
-                        <a class="close" onclick=\'RemoveImage("'+ data.result.newFileName + '")\'>×</a>\
-                        <a href=' + data.result.path + ' class="pdfUpload" target="_blank" dataRemove="' + data.result.newFileName + '" style="overflow-x: hidden;">' + data.result.oldFileName + '</a>\
-                        </div>\
-                        </li>');
-                } else {
-                    $('#image').append(
-                        '<li style="display: inline-block">\
-                        <div class="thumbnail" >\
-                        <a class="close" onclick=\'RemoveImage("'+ data.result.newFileName + '")\'>×</a>\
-                        <img class="imgUpload" src="'+ data.result.path + '" alt="' + data.result.newFileName + '" width="200px" height="200px"/>\
-                        </div>\
-                        </li>');
-                }
+                $('#image').append(
+                    '<li style="display: inline-block">\
+                     <div class="thumbnail" newname= "'+ data.result.newFileName + '">\
+                     <a class="close" onclick=\'RemoveImage("'+ data.result.newFileName + '","' + data.result.path + '")\'>×</a>\
+                     <a href="'+ data.result.path + '" class="pdfUpload" target="_blank" data-remove="' + data.result.newFileName + '" style="overflow-x: hidden;">' + data.result.oldFileName + '</a>\
+                    </div>\
+                    </li>');
                 var attachment = {
                     FILE_EXT: data.result.ext,
                     FILE_NAME: data.result.newFileName,
@@ -539,24 +529,34 @@
         progressall: function (e, data) { }
     });
 
-    /// Xoa file khi nhan x
-    function RemoveImage(fileName) {
-        for (var i = 0; i < attachments.length; i++) {
+
+    function RemoveImage(fileName, path) {
+        for (let i = 0; i < attachments.length; i++) {
             if (attachments[i]["FILE_NAME"] == fileName) {
                 attachments.splice(i, 1);
                 break;
             }
         }
         $('#image li').each(function () {
-
-            if ($(this).find('.imgUpload').prop("alt") == fileName) {
+            if ($(this).find('a.pdfUpload').attr("data-remove") == fileName) {
                 $(this).html("");
             }
-            if ($(this).find('.pdfUpload').attr("dataRemove") == fileName) {
-                $(this).html("");
+        })
+        shwLoading(true);
+        $.post('/InstalmentsCardsBulk/DeleteFileCT', {
+            path: path
+        }, function (data) {
+            if (data.code != null && data.code != "00") {
+                showAlert({ title: 'Cảnh báo', message: data.message });
             }
-        });
+        }).done(function () { })
+            .fail(function (e) { showAlert({ title: 'Cảnh báo', message: 'Có lỗi trong quá trình thực hiện!' }); })
+            .always(function () { shwLoading(false); });
     };
+
+
+
+    
     function clearData() {
         attachments = [];
         $('#image li').each(function () {

@@ -1,0 +1,17 @@
+InitDataTable:
+• Ưu điểm:
+	- Không phân trang (paging: false): Điều này hữu ích giúp hiển thị tất cả dữ liệu mà không cần phải phân trang. Sử dụng ở 1 số trường hợp sử dụng, như khi dữ liệu không quá lớn.
+	- Không có cột sắp xếp (order: []): Loại bỏ khả năng sắp xếp ở các cột(tăng dần, giảm dân) ,  chặn sắp xếp cột từ phía người dùng.
+	- Các cột có chiều rộng cố định: Set chiều rộng cố định cho từng cột có thể giúp giao diện hiển thị được căn chỉnh một cách đồng nhất trên mọi thiết bị và kích thước màn hình.
+• Nhược điểm:
+	- Không có phân trang: Nếu dữ liệu quá lớn, việc hiển thị tất cả dữ liệu lên bảng sẽ gặp khó khăn.
+	- Không có sắp xếp cột: Nếu cần sắp xếp dữ liệu dựa trên các cột, làm mất đi tính linh hoạt của bảng.
+InitDataTableDetail:
+•	Ưu điểm:
+	- Phân trang (paging: true): Cho phép hiển thị dữ liệu một cách phân đoạn, giúp tối ưu và tương tác với các dữ liệu lớn.
+	- Không có cột sắp xếp: Tương tự như InitDataTable, việc này cho chặn sắp xếp cột từ phía người dùng.
+	- Có thể chỉ định cột cố định(fixedColums): Có thể chỉ định số lượng cột cố định bên trái hoặc bên phải của bảng, khi người dùng cuộn trang (scroll sang trái hoặc phải) thì các cột này đứng im, giúp cho người dùng dễ dàng đối chiếu các thông tin.
+•	Nhược điểm:
+	- Có phân trang: Cần thiết trong một số trường hợp, nhưng nó cũng có thể làm giảm trải nghiệm người dùng, đặc biệt là khi cần xem toàn bộ dữ liệu.
+	- Không có sắp xếp cột: Nếu cần sắp xếp dữ liệu dựa trên các cột, làm mất đi tính linh hoạt của bảng.
+

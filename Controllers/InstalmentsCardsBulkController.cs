@@ -518,7 +518,28 @@ namespace Instalments.Controllers
 			}
 		}
 
-
+		public ActionResult DeleteFileCT(string path)
+		{
+			try
+			{
+				string filePath = Server.MapPath("~" + path);
+				System.IO.File.Delete(filePath);
+				return Json(new
+				{
+					code = "00",
+					message = "Clear file success!"
+				}, JsonRequestBehavior.AllowGet);
+			}
+			catch (Exception ex)
+			{
+				log.Error("[InstalmentsCardBulk][DeleteFileCT] Exception: " + ex.Message, ex);
+				return Json(new
+				{
+					code = "01",
+					message = "Xảy ra lỗi khi clear file CT, vui lòng reload lại trang!"
+				}, JsonRequestBehavior.AllowGet);
+			}
+		}
 
 
 
